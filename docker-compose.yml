@@ -12,6 +12,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     expose:
       - 9000/tcp
+    network_mode: bridge
 
 # need to add a file named [vhost fqdn name]_location with contents : proxy_set_header Connection $http_connection;
 #  for docker ui to function correctly behind proxy
@@ -30,3 +31,4 @@ services:
       - /mnt/data/config/proxy-arm:/etc/nginx/vhost.d:ro
     ports:
       - 80:80
+    network_mode: bridge
