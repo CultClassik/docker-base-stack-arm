@@ -1,0 +1,32 @@
+version: '2'
+services:
+  # UI for Docker
+  ui:
+    container_name: home-ui
+    image: hypriot/rpi-dockerui
+    restart: always
+    environment:
+      VIRTUAL_HOST: rpi.diehlabs.lan
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    expose:
+      - 9000/tcp
+
+# need to add a file named [vhost fqdn name]_location with contents : proxy_set_header Connection $http_connection;
+#  for docker ui to function correctly behind proxy
+
+# docker run -d --expose=9000/tcp --name=docker-ui --restart=always -e VIRTUAL_HOST=rpi.diehlabs.lan -e VIRTUAL_PORT=9000 -v /etc/localtime:/etc/localtime:ro -v /var/run/docker.sock:/var/run/docker.sock:ro hypriot/rpi-dockerui
+# docker run -d --expose=9000/tcp --name=docker-ui --restart=always -v /etc/localtime:/etc/localtime:ro -v /var/run/docker.sock:/var/run/docker.sock:ro hypriot/rpi-dockerui
+
+  # nginx reverse proxy for access to container web uis
+  # auto generates it's config with dockergen
+  proxy:
+    container_name: home-proxy
+    image: braingamer/nginx-proxy-arm
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - /mnt/data/config/proxy-arm:/etc/nginx/vhost.d:ro
+    ports:
+      - 80:80
