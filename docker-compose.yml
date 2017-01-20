@@ -2,7 +2,7 @@ version: '2'
 services:
   # UI for Docker
   ui:
-    container_name: home-ui
+    container_name: dockerui
     image: hypriot/rpi-dockerui
     restart: always
     environment:
@@ -12,6 +12,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     expose:
       - 9000/tcp
+    network_mode: bridge
 
 # need to add a file named [vhost fqdn name]_location with contents : proxy_set_header Connection $http_connection;
 #  for docker ui to function correctly behind proxy
@@ -22,7 +23,7 @@ services:
   # nginx reverse proxy for access to container web uis
   # auto generates it's config with dockergen
   proxy:
-    container_name: home-proxy
+    container_name: proxygen
     image: braingamer/nginx-proxy-arm
     volumes:
       - /etc/localtime:/etc/localtime:ro
@@ -30,3 +31,4 @@ services:
       - /mnt/data/config/proxy-arm:/etc/nginx/vhost.d:ro
     ports:
       - 80:80
+    network_mode: bridge
