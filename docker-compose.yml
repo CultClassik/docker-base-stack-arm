@@ -28,7 +28,7 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/tmp/docker.sock:ro
-      - /mnt/data/config/proxy-arm/vhost:/etc/nginx/vhost.d:ro
+      - /mnt/data/config/proxy-arm/vhost.d:/etc/nginx/vhost.d:ro
       - /mnt/data/config/proxy-arm/certs:/etc/nginx/certs:ro
       - /usr/share/nginx/html
     ports:
