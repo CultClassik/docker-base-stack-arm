@@ -40,7 +40,8 @@ services:
     container_name: base-ssl
     image: cultclassik/letsencrypt
     volumes_from:
-      - container_name: base-proxy
+      - proxy 
     volumes:
       - /mnt/data/config/proxy-arm/certs:/etc/nginx/certs:rw
       - /var/run/docker.sock:/var/run/docker.sock:ro
+    network_mode: bridge
