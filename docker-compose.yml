@@ -3,13 +3,14 @@ services:
   # UI for Docker
   ui:
     container_name: base-ui
-    image: hypriot/rpi-dockerui
+    image: portainer/portainer:arm64 
     restart: always
     environment:
       VIRTUAL_HOST: rpi.diehlabs.lan
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /mnt/data/config/portainer-arm64:/data
     expose:
       - 9000/tcp
     network_mode: bridge
