@@ -1,7 +1,9 @@
 # docker-base-stack
 
-Just UI for Docker and Nginx reverse proxy containers for armhf platforms.
+My base stack for aarch64 platform Docker hosts.
 
 ### Containers:
-* UI for Docker
-* Nginx-Dockergen
+* Portainer
+* Nginx Reverse proxy
+* docker-gen
+* letsencrypt
