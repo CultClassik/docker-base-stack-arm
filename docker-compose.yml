@@ -1,9 +1,9 @@
 version: '2'
 services:
-  # UI for Docker
+
   ui:
     container_name: base-ui
-    image: portainer/portainer:arm64 
+    image: portainer/portainer:arm64
     restart: always
     environment:
       VIRTUAL_HOST: rpi.diehlabs.lan
@@ -15,14 +15,12 @@ services:
       - 9000/tcp
     network_mode: bridge
 
-  # nginx reverse proxy for access to container web uis
-  # auto generates it's config with dockergen
   proxy:
     container_name: base-proxy
-    image: braingamer/nginx-proxy-arm
+    image: armhfbuild/nginx
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - /mnt/data/config/proxy-arm/conf.d:/etc/nginx/conf.d
       - /mnt/data/config/proxy-arm/vhost.d:/etc/nginx/vhost.d
       - /mnt/data/config/proxy-arm/certs:/etc/nginx/certs:ro
       - /usr/share/nginx/html
@@ -31,14 +29,34 @@ services:
       - 443:443
     network_mode: bridge
 
+  dockergen:
+    container_name: base-dockergen
+    image: cultclassik/dockergen-armhf
+    build: ./dockergen
+    volumes_from:
+      - proxy
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    network_mode: bridge
+    entry_point:
+      - /usr/local/bin/docker-gen
+      - -notify-sighup
+      - base-proxy
+      - -watch
+      - -only-exposed
+      - /etc/docker-gen/templates/nginx.tmpl
+      - /etc/nginx/conf.d/default.conf
+    depends_on:
+      - proxy
+
   ssl:
     container_name: base-ssl
     image: cultclassik/letsencrypt
     restart: always
     environment:
-      NGINX_PROXY_CONTAINER: base-proxy 
+      NGINX_PROXY_CONTAINER: base-proxy
     volumes_from:
-      - proxy 
+      - proxy
     volumes:
       - /mnt/data/config/proxy-arm/certs:/etc/nginx/certs:rw
       - /var/run/docker.sock:/var/run/docker.sock:ro
