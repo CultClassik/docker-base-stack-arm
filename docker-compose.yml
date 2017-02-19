@@ -15,12 +15,6 @@ services:
       - 9000/tcp
     network_mode: bridge
 
-# need to add a file named [vhost fqdn name]_location with contents : proxy_set_header Connection $http_connection;
-#  for docker ui to function correctly behind proxy
-
-# docker run -d --expose=9000/tcp --name=docker-ui --restart=always -e VIRTUAL_HOST=rpi.diehlabs.lan -e VIRTUAL_PORT=9000 -v /etc/localtime:/etc/localtime:ro -v /var/run/docker.sock:/var/run/docker.sock:ro hypriot/rpi-dockerui
-# docker run -d --expose=9000/tcp --name=docker-ui --restart=always -v /etc/localtime:/etc/localtime:ro -v /var/run/docker.sock:/var/run/docker.sock:ro hypriot/rpi-dockerui
-
   # nginx reverse proxy for access to container web uis
   # auto generates it's config with dockergen
   proxy:
