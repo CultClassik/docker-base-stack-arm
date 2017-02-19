@@ -36,7 +36,7 @@ services:
     volumes_from:
       - proxy
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /var/run/docker.sock:/tmp/docker.sock:ro
     network_mode: bridge
     entrypoint:
       - /usr/local/bin/docker-gen
