@@ -19,7 +19,7 @@ services:
     container_name: base-proxy
     image: armhfbuild/nginx
     environment:
-      LETSENCRYPT_HOST: "home.diehlabs.tech,bi.diehlabs.tech"
+      LETSENCRYPT_HOST: "ha.diehlabs.tech,bi.diehlabs.tech"
       LETSENCRYPT_EMAIL: "cultclassik@gmail.com"
     volumes:
       - /etc/localtime:/etc/localtime:ro
