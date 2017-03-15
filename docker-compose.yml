@@ -17,7 +17,7 @@ services:
 
   proxy:
     container_name: base-proxy
-    image: jwilder/nginx-proxy 
+    image: armhfbuild/nginx 
 #    environment:
 #      LETSENCRYPT_HOST: "bi.diehlabs.tech"
 #      LETSENCRYPT_EMAIL: "cultclassik@gmail.com"
@@ -39,14 +39,16 @@ services:
     volumes_from:
       - proxy
     volumes:
+      - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/tmp/docker.sock:ro
+      - /mnt/data/config/proxy-arm/templates:/etc/docker-gen/templates
     network_mode: bridge
     entrypoint:
       - /usr/local/bin/docker-gen
       - -notify-sighup
       - base-proxy
       - -watch
-      - -only-exposed
+#      - -only-exposed
       - /etc/docker-gen/templates/nginx.tmpl
       - /etc/nginx/conf.d/default.conf
     depends_on:
