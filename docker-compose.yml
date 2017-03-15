@@ -17,10 +17,10 @@ services:
 
   proxy:
     container_name: base-proxy
-    image: armhfbuild/nginx
-    environment:
-      LETSENCRYPT_HOST: "ha.diehlabs.tech,bi.diehlabs.tech"
-      LETSENCRYPT_EMAIL: "cultclassik@gmail.com"
+    image: jwilder/nginx-proxy 
+#    environment:
+#      LETSENCRYPT_HOST: "bi.diehlabs.tech"
+#      LETSENCRYPT_EMAIL: "cultclassik@gmail.com"
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /mnt/data/config/proxy-arm/conf.d:/etc/nginx/conf.d
