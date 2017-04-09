@@ -1,19 +1,27 @@
 version: '2'
-services:
+networks:
+  proxy-tier:
+    external:
+      name: nginx-proxy
 
+services:
   ui:
     container_name: base-ui
     image: portainer/portainer:arm64
     restart: always
     environment:
       VIRTUAL_HOST: rpi.diehlabs.lan
+      VIRTUAL_PORT: 9000
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /mnt/data/config/portainer-arm64:/data
     expose:
       - 9000/tcp
-    network_mode: bridge
+    networks:
+      - proxy-tier
+    depends_on:
+      - proxy
 
   proxy:
     container_name: base-proxy
@@ -30,7 +38,8 @@ services:
     ports:
       - 80:80
       - 443:443
-    network_mode: bridge
+    networks:
+      - proxy-tier
 
   dockergen:
     container_name: base-dockergen
@@ -42,15 +51,9 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/tmp/docker.sock:ro
       - /mnt/data/config/proxy-arm/templates:/etc/docker-gen/templates
-    network_mode: bridge
-    entrypoint:
-      - /usr/local/bin/docker-gen
-      - -notify-sighup
-      - base-proxy
-      - -watch
-#      - -only-exposed
-      - /etc/docker-gen/templates/nginx.tmpl
-      - /etc/nginx/conf.d/default.conf
+      - /mnt/data/config/dockergen.cfg:/etc/dockergen.cfg
+    networks:
+      - proxy-tier
     depends_on:
       - proxy
 
@@ -66,6 +69,5 @@ services:
     volumes:
       - /mnt/data/config/proxy-arm/certs:/etc/nginx/certs:rw
       - /var/run/docker.sock:/var/run/docker.sock:ro
-    network_mode: bridge
     depends_on:
       - proxy

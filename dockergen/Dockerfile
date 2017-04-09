@@ -17,4 +17,6 @@ RUN rm -f docker-gen-linux-$HOST_ARCH-$VERSION.tar.gz && \
 
 COPY tmpl/nginx.tmpl /etc/docker-gen/templates/nginx.tmpl
 
-ENTRYPOINT ["/usr/local/bin/docker-gen"]
+VOLUME ["/etc/dockergen.cfg"]
+
+ENTRYPOINT ["/usr/local/bin/docker-gen", "-config", "/etc/dockergen.cfg"]
