@@ -25,9 +25,11 @@ services:
 
   proxy:
     container_name: base-proxy
-    image: cultclassik/nginx-proxy-arm
+    image: cultclassik/nginx-proxy-aarch64
     build: ./nginx-proxy-arm 
-#    environment:
+    environment:
+      PGID: 1000
+      PUID: 1000
 #      LETSENCRYPT_HOST: "bi.diehlabs.tech"
 #      LETSENCRYPT_EMAIL: "cultclassik@gmail.com"
     volumes:
