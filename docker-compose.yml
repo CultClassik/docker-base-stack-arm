@@ -25,7 +25,8 @@ services:
 
   proxy:
     container_name: base-proxy
-    image: armhfbuild/nginx 
+    image: cultclassik/nginx-proxy-arm
+    build: ./nginx-proxy-arm 
 #    environment:
 #      LETSENCRYPT_HOST: "bi.diehlabs.tech"
 #      LETSENCRYPT_EMAIL: "cultclassik@gmail.com"
@@ -60,6 +61,7 @@ services:
   ssl:
     container_name: base-ssl
     image: cultclassik/letsencrypt
+    build: ./docker-letsencrypt-nginx-proxy-companion
     restart: always
     environment:
       NGINX_PROXY_CONTAINER: base-proxy
