@@ -1,5 +1,4 @@
 FROM armhf/alpine:3.3
-
 MAINTAINER Chris Diehl <cultclassik@gmail.com>
 
 RUN apk -U add openssl
@@ -15,7 +14,7 @@ RUN rm -f docker-gen-linux-$HOST_ARCH-$VERSION.tar.gz && \
   apk del tar && \
   rm -rf /var/cache/apk/*
 
-COPY tmpl/nginx.tmpl /etc/docker-gen/templates/nginx.tmpl
+#COPY tmpl/nginx.tmpl /etc/docker-gen/templates/nginx.tmpl
 
 VOLUME ["/etc/dockergen.cfg"]
 
